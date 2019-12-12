@@ -1,0 +1,59 @@
+teststring: hi #quotes are optional
+testbool: true
+# Comments in the same line as a jaml definition are allowed, but should be avoided if possible,
+# as they can greatly increase compile time of the file.
+
+# a child has to have higher indentation than the parent
+# a sibling has to have the same indentation as the leading one.
+subClass: 
+ teststring: "hi" 
+ testint: 55      
+ testdouble: 44.949
+ 
+# all whitespaces after the first non-whitespace character are optional
+ stringList: #list-elements are defined with a '-', like in yaml
+    -one
+    -  two
+
+# single quotes are not allowed, but everything can be put in double-quotes
+testchar: "p"
+testfloat: "2.68"
+
+# if a pound sign (#) is part of the value, it has to be put in quotes,
+# otherwise it will be parsed as comment
+teststring: "#NUMBER_ONE" 
+intList:
+# IMPORTANT: values in quotes are greedy-matched while quoteless are matched lazy
+# this makes '#' contained in values possible but also means,
+#  that comments can't contain double quotes after this, as they will be matched.
+# for comments after double-quoted values, stick to single quotes ' ' if needed
+ -"42" #'42' is the answer
+ -0    #if the value isn't quoted, you may as well use double-quotes in the comment " "
+
+classList: 
+ -
+  teststring: R
+  stringList:
+   -kk
+   - "Have a break. Have a KitKat"
+
+ # every non-primitive can have a custom constructor. if left blank, default will be used
+ - Custom.Class(teststring) 
+  testint: 51
+
+classMap:
+ 3: #this line defines a new Key-Value pair, as the value is left blank, 
+    # a standard List<> will be instantiated as value
+    
+  - (27) #if no classpath is defined, the parser will assume that the generic Type is meant
+         # and will call it's constructor with specified arguments
+   
+   testint: 1
+   #if leading or following spaces are needed, string has to be put in double quotes.
+   teststring: "test " 
+   
+ 90:
+  # quoting works for anything, including custom constructors
+  - "Custom.Class(#)"
+   # If quotes are needed at the beginning and the end of the string, just use double quotes twice
+   teststring: ""YES""
